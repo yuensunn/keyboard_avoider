@@ -103,7 +103,6 @@ class _KeyboardAvoiderState extends State<KeyboardAvoider> with WidgetsBindingOb
   }
 
   /// WidgetsBindingObserver
-
   @override
   void didChangeMetrics() {
     //Need to wait a frame to get the new size
@@ -113,7 +112,6 @@ class _KeyboardAvoiderState extends State<KeyboardAvoider> with WidgetsBindingOb
   }
 
   /// AnimationStatus
-
   void _animationStatusChanged(AnimationStatus status) {
     if (status == AnimationStatus.completed) {
       final keyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0.0;
@@ -124,11 +122,10 @@ class _KeyboardAvoiderState extends State<KeyboardAvoider> with WidgetsBindingOb
   }
 
   /// Private
-
   Widget _buildAnimatedContainer(Widget child) {
     return AnimatedContainer(
       key: _animationKey,
-      padding: EdgeInsets.only(bottom: _overlap),
+      padding: EdgeInsets.only(bottom: _overlap.isNaN ? 0.0 : _overlap),
       duration: widget.duration,
       curve: widget.curve,
       child: child,
@@ -215,7 +212,7 @@ class _KeyboardAvoiderState extends State<KeyboardAvoider> with WidgetsBindingOb
     // Calculate the offset needed to show the object in the [ScrollView]
     // so that its bottom touches the top of the keyboard.
     final viewport = RenderAbstractViewport.of(object);
-    final offset = viewport.getOffsetToReveal(object, 1.0).offset + widget.focusPadding;
+    final offset = viewport.getOffsetToReveal(object, 1.0).offset + widget.focusPadding + MediaQuery.of(context).viewInsets.bottom;
 
     // If the object is covered by the keyboard, scroll to reveal it,
     // and add [focusPadding] between it and top of the keyboard.
